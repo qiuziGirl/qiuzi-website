@@ -1,0 +1,14 @@
+{
+  "name": "qiuzi-website",
+  "version": "1.0.0",
+  "description": "My personal website.",
+  "author": "qiuzi <2515632823@qq.com>",
+  "license": "MIT",
+  "scripts": {
+    "dev": "vuepress dev docs",
+    "build": "vuepress build docs"
+  },
+  "dependencies": {
+    "vuepress": "^1.4.0"
+  }
+}
