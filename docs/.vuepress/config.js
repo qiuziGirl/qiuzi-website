@@ -17,7 +17,7 @@ module.exports = {
               { text: '计算机基础', link: '/cs/' },
             ]
           },
-          { text: '博文', link: '/blog/' },
+          { text: '博文', link: 'https://blog.csdn.net/qq_41548644' },
           { text: '关于我', link: '/about/'},
         ],
         sidebar: {
