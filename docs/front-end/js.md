@@ -6,7 +6,7 @@ JS 分为七种内置类型，七种内置类型又分为两大类型：基本�
 
 基本类型有六种： `number`，`string`，`boolean`，`symbol`，`undefined`，`null`。
 
-其中，JS的数字类型是浮点型的，没有整形。并且，浮点类型基于 IEEE 754 标准实现，在使用过程中会遇到某些 [Bug]()。`NaN` 也属于 `number` 类型，但 `NaN` 不等于自身。
+其中，JS的数字类型是浮点型的，没有整形。并且，浮点类型基于 IEEE 754 标准实现，在使用过程中会遇到某些 [Bug](#为什么-0-1-0-2-0-3)。`NaN` 也属于 `number` 类型，但 `NaN` 不等于自身。
 
 对于基本类型，若使用字面量定义方式，则这个变量只是一个字面量，只有在必要的时候才转换为对应的数据类型。
 
@@ -29,7 +29,7 @@ console.log(a.name); // EF
 `typeof` 对于基本类型，除了 `null` 外，都可以显示正确的类型。
 
 ```js
-typeof 1;          // 'number‘
+typeof 1;          // 'number'
 typeof '1';        // 'string'
 typeof true;       // 'boolean'
 typeof Symbol();   // 'symbol'
@@ -233,11 +233,13 @@ toPrimitive([]) == 0
 
 对象可通过 `__proto__` 来寻找不属于该对象的属性，`__proto__` 将对象连接起来组成了原型链。
 
-如果想进一步地了解原型，可以仔细阅读 yck 文章 [深度解析原型中的各个难点](https://github.com/KieSun/Blog/issues/2)。
+如果想进一步地了解原型，可以仔细阅读 yck 文章 [深度解析原型中的各个难点](https://github.com/KieSun/Blog/issues/2)。同时，以下流程图以 **小猪佩奇** 为例进行分析：
+
+![](/assets/img/prototype-demo.png)
 
 ## new
 
-1. 新生成一个对象
+1. 新生成一个空对象
 2. 链接到原型
 3. 绑定 this
 4. 返回新对象
@@ -245,17 +247,17 @@ toPrimitive([]) == 0
 在调用 `new` 的过程中，会发生以上四件事情，我们也可以试着来自己实现一个 `new`
 
 ```js
-function create() {
+function _new() {
   // 创建一个空对象
-  let obj = new Object()
+  const context = new Object()
   // 获得构造函数
-  let Con = [].shift.call(arguments)
+  const constructor = [].shift.call(arguments)
   // 链接到原型
-  obj.__proto__ = Con.prototype
+  context.__proto__ = constructor.prototype
   // 绑定 this，执行构造函数
-  let result = Con.apply(obj, arguments)
+  const result = constructor.apply(context, arguments)
   // 确保 new 出来是一个对象
-  return typeof result === 'object' ? result : obj
+  return typeof result === 'object' ? result : context
 }
 ```
 
@@ -288,9 +290,9 @@ new Foo.getName()    // -> 1
 new Foo().getName()  // -> 2
 ```
 
-![](https://yck-1254263422.cos.ap-shanghai.myqcloud.com/blog/2019-06-01-042626.png)
+![](http://qiuzi-blog.oss-cn-shenzhen.aliyuncs.com/js-new.png)
 
-从上图可以看出，`new Foo()` 的优先级大于 `new Foo()`。所以对于上述代码来说，可以这样划分执行顺序
+从上图可以看出，`new Foo()` 的优先级大于 `new Foo`。所以对于上述代码来说，可以这样划分执行顺序
 
 ```js
 new (Foo.getName())
@@ -299,27 +301,29 @@ new (Foo.getName())
 
 对于第一个函数来说，先执行 `Foo.getName()`，所以结果为 1；对于后者来说，先执行 `new Foo()` 产生一个实例，然后通过原型链找到 `Foo` 上的 `getName` 函数，所以结果为 2。
 
-# instanceof
+## instanceof
 
-`instanceof` 可以正确判断对象的类型，因为内部机制是通过判断对象的原型链中是不是找到类型的 `prototype`。
+`instanceof` 运算符返回一个布尔值，表示对象是否为某个构造函数的实例。
 
-我们可以试着实现一下 `instanceof`
+运算符左边是实例对象，右边是构造函数。它会检查右边构造函数的原型对象（prototype）是否在左边对象的原型链上。我们可以试着实现 `instanceof`
 
 ```js
-function instanceof(left, right) {
-  // 获得类型原型
-  let prototype = right.prototype
-  // 获得对象的原型
-  left = left.__proto__
-  // 判断对象的类型是否等于类型的原型
+function _instanceof(object, constructor) {
+  // 获取构造函数的原型（显式）
+  const prototype = constructor.prototype
+  // 获取实例对象的原型（隐式）
+  let __proto__ = object.__proto__
+
+  // 判断对象的隐式原型是否等于构造函数的显式原型
   while(true) {
-    if (left === null) {
+    if (__proto__ === null) {
       return false
     }
-    if (prototype === left) {
+    if (__proto__ === prototype) {
       return true
     }
-    left = left.__proto__
+
+    __proto__ = __proto__.__proto__
   }
 }
 ```
@@ -327,6 +331,10 @@ function instanceof(left, right) {
 ## this
 
 `this` 是很多人混淆的概念，但是其实一点也不难，只需要记住以下几个规则则可。
+
+1. 全局环境中的 `this`，指向顶层对象 `window`
+2. 构造函数中的 `this`，指向实例对象
+3. 对象方法中的 `this`，指向方法运行时所在的对象
 
 ```js
 var a = 1 // 注意：let a = 1，就不一样了喔
@@ -365,7 +373,108 @@ function a() {
 a()()() // -> window
 ```
 
-箭头函数其实是没有 `this` 的，这个函数中 `this` 只取决于它外面的第一个不是箭头函数的函数的 `this`。在这个例子中，因为调用 `a` 符合前面代码中第一种情况，所以 `this` 是 `window`。并且，`this` 一旦绑定了上下文，就不会被任何代码改变。
+箭头函数其实是**没有** `this` 的，这个函数中 `this` 只取决于它外面的**第一个不是箭头函数**的函数的 `this`。在这个例子中，因为调用 `a` 符合前面代码中第一种情况，所以 `this` 是 `window`。并且，`this` 一旦绑定了上下文，就不会被任何代码改变。
+
+## 闭包
+
+闭包的概念：指有权访问另外一个函数作用域中的变量的函数。
+
+```js
+function A() {
+  let a = 1
+  function B() {
+    console.log(a)
+  }
+  return B
+}
+```
+
+你是否疑惑，为什么函数 A 已经弹出调用栈了，为什么函数 B 还能引用到函数 A 中的变量。因为函数 A 中的变量这时候已经存储在堆上的。现在 JS 引擎可以通过逃逸分析辨别出哪些变量需要存储在堆上，哪些需要存储在栈上。
+
+经典面试题，循环中使用闭包解决 `var` 定义函数的问题
+
+```js
+for (var i = 1; i <= 5; i++) {
+  setTimeout(function timer() {
+    console.log(i)
+  }, i * 1000)
+}
+```
+
+首先因为 `setTimeout` 是异步函数，所以会先把循环全部执行完毕，这时候 `i` 就是 6 了，所以会输出一堆 6，解决办法有三种。
+
+第一种，使用闭包：
+
+```js
+for (var i = 1; i <= 5; i++) {
+  (function(j) {
+    setTimeout(function timer() {
+      console.log(j)
+    }, j * 1000)
+  })(i)
+}
+
+// ====== 等同于 ======
+for (var i = 1; i <= 5; i++) {
+  function print(i) {
+    setTimeout(function timer() {
+      console.log(i)
+    }, i * 1000)
+  }
+
+  print(i)
+}
+```
+
+第二种，使用 `setTimeout` 第三个参数：
+
+```js
+for (var i = 1; i <= 5; i++) {
+  setTimeout(function timer(j) {
+    console.log(j)
+  }, i * 1000, i)
+}
+```
+
+第三种，使用 `let` 定义 `i`：
+
+```js
+for (let i = 1; i <= 5; i++) {
+  setTimeout(function timer() {
+    console.log(i)
+  }, i * 1000)
+}
+```
+
+因为对于使用 `let` 来说，他会创建一个块级作用域，相当于
+
+```js
+{
+  // 形成块级作用域
+  let i = 0
+  {
+    let ii = i
+    setTimeout(function timer() {
+      console.log(ii)
+    }, i * 1000)
+  }
+  i++
+  {
+    let ii = i
+  }
+  i++
+  {
+    let ii = i
+  }
+  ...
+}
+```
+
+常见应用场景：
+
+- 封装对象私有属性和方法
+- 单例模式的实现
+- 防抖与节流的实现
 
 ## 执行上下文
 
@@ -494,90 +603,6 @@ specialObject.foo = foo // {DontDelete}, {ReadOnly}
 delete Scope[0] // remove specialObject from the front of scope chain
 ```
 
-## 闭包
-
-闭包的定义很简单：函数 A 返回了一个函数 B,并且函数 B 中使用了函数 A 的变量，函数 B 就被称为闭包。
-
-```js
-function A() {
-  let a = 1
-  function B() {
-    console.log(a)
-  }
-  return B
-}
-```
-
-你是否疑惑，为什么函数 A 已经弹出调用栈了，为什么函数 B 还能引用到函数 A 中的变量。因为函数 A 中的变量这时候已经存储在堆上的。现在 JS 引擎可以通过逃逸分析辨别出哪些变量需要存储在堆上，哪些需要存储在栈上。
-
-经典面试题，循环中使用闭包解决 `var` 定义函数的问题
-
-```js
-for (var i = 1; i <= 5; i++) {
-  setTimeout(function timer() {
-    console.log(i)
-  }, i * 1000)
-}
-```
-
-首先因为 `setTimeout` 是异步函数，所以会先把循环全部执行完毕，这时候 `i` 就是 6 了，所以会输出一堆 6，解决办法有三种。
-
-第一种，使用闭包：
-
-```js
-for (var i = 1; i <= 5; i++) {
-  (function(j) {
-    setTimeout(function timer() {
-      console.log(j)
-    }, j * 1000)
-  })(i)
-}
-```
-
-第二种，使用 `setTimeout` 第三个参数：
-
-```js
-for (var i = 1; i <= 5; i++) {
-  setTimeout(function timer(j) {
-    console.log(j)
-  }, i * 1000, i)
-}
-```
-
-第三种，使用 `let` 定义 `i`：
-
-```js
-for (let i = 1; i <= 5; i++) {
-  setTimeout(function timer() {
-    console.log(i)
-  }, i * 1000)
-}
-```
-
-因为对于使用 `let` 来说，他会创建一个块级作用域，相当于
-
-```js
-{
-  // 形成块级作用域
-  let i = 0
-  {
-    let ii = i
-    setTimeout(function timer() {
-      console.log(ii)
-    }, i * 1000)
-  }
-  i++
-  {
-    let ii = i
-  }
-  i++
-  {
-    let ii = i
-  }
-  ...
-}
-```
-
 ## 深浅拷贝
 
 ```js
@@ -592,7 +617,7 @@ console.log(b.age) // -> 2
 
 从上述例子中我们可以发现，如果给一个变量赋值一个对象，那么两者的值会是同一个引用。其中一方改变，另一方也会相应地改变。
 
-通过开发中，我们不希望出现这样的问题，则可以使用浅拷贝来解决这个问题。
+但是开发中，我们不希望出现这样的问题，则可以使用浅拷贝来解决这个问题。
 
 ### 浅拷贝
 
@@ -602,13 +627,13 @@ console.log(b.age) // -> 2
 let a = {
   age: 1
 }
-let b = Object.assign(a)
+let b = Object.assign({}, a)
 
 a.age = 2
 console.log(b.age) // -> 1
 ```
 
-当然，我们也可以通过展开运算符（...）来解决
+当然，我们也可以通过扩展运算符（...）来解决
 
 ```js
 let a = {
@@ -620,7 +645,7 @@ a.age = 2
 console.log(b) // -> 1
 ```
 
-通常浅拷贝就可以解决大部分问题了，但是当我们遇到以下问题，就需要使用到深拷贝了
+通常浅拷贝就可以解决大部分问题，但当我们遇到以下问题，就需要使用深拷贝
 
 ```js
 let a = {
@@ -635,7 +660,7 @@ a.jobs.first = 'EF'
 console.log(b.jobs.first) // -> EF
 ```
 
-浅拷贝只解决了第一层的问题，如果接下去的值还有对象的话，那么就又回到刚开始的话题了，两者享有相同的引用。要解决这个问题，我们需要引入深拷贝。
+浅拷贝只解决了第一层的问题，如果接下去的值还有对象的话，那么就又回到刚开始的话题，两者享有相同的引用。要解决这个问题，我们需要引入深拷贝。
 
 ### 深拷贝
 
@@ -678,11 +703,11 @@ let newObj = JSON.parse(JSON.stringify(obj))
 console.log(newObje)
 ```
 
-// 如果你有这么一个循环引用对象，你会发现你不能通过该方法深拷贝
+如果你有这么一个循环引用对象，你会发现你不能通过该方法深拷贝
 
-![](https://yck-1254263422.cos.ap-shanghai.myqcloud.com/blog/2019-06-01-042627.png)
+![](http://qiuzi-blog.oss-cn-shenzhen.aliyuncs.com/deep-copy-error.png)
 
-再遇到函数、`undefined`、`symbol` 的时候，该对象也不能正常序列化
+在遇到 `undefined`、`symbol`、函数的时候，该对象也不能正常序列化
 
 ```js
 let a = {
@@ -696,9 +721,9 @@ let b = JSON.parse(JSON.stringify())
 console.log(b) // { name: 'qiuzi' }
 ```
 
-你会发现在上述情况中，该方法会省略函数和 `undefined` 。
+你会发现在上述情况中，该方法会省略 `undefined` 和函数。
 
-但是在通常情况下，复杂数据都是序列化的，所以这个函数可以解决大部分问题，并且该函数是内置函数，处理深拷贝性能最快。当然，如果你的数据中含有以上三种情况，可以使用[lodash 的深拷贝函数](https://lodash.com/docs#cloneDeep)。
+但是在通常情况下，复杂数据都是序列化的，所以这个函数可以解决大部分问题，并且该函数是内置函数，处理深拷贝性能最快。当然，如果你的数据中含有以上三种情况，可以使用 [lodash 的深拷贝函数](https://lodash.com/docs#cloneDeep) 或自行封装 `cloneDeep` 方法，参考文章 [如何写出一个惊艳面试官的深拷贝](https://juejin.cn/post/6844903929705136141)。
 
 如果你所需拷贝的独享含有内置类型并且不包含函数，可以使用 `MessageChannel`
 
@@ -811,36 +836,36 @@ define(function(require, exports, module) {
 
 ## 防抖
 
-你是否在日常开发中遇到一个问题，在滚动事件中需要做个复杂计算或者实现一个按钮的防二次点击操作。
+你是否在日常开发中遇到一个问题，在滚动事件中需要做复杂计算或者实现一个按钮的防二次点击操作。
 
-这些需求都可以通过函数防抖动来实现。尤其第一个需求，如果在频繁的事件回调中做复杂计算，很有可能导致页面卡顿，不如将多次计算合并为一次计算，只在一个准确点做操作。
+这些需求都可以通过函数防抖来实现。尤其第一个需求，如果在频繁的事件回调中做复杂计算，很有可能导致页面卡顿，不如将多次计算合并为一次计算，只在一个准确点做操作。
 
 PS：防抖和节流的作用都是防止函数多次调用。区别在于，假设一个用户一直触发这个函数，且每次触发函数的间隔小于 wait，防抖的情况下只会调用一次；而节流的情况下，会每隔一定时间（参数 wait）调用函数。
 
 我们先来看一个袖珍版的防抖，理解一下防抖的实现：
 
 ```js
-// func 是用户传入需要防抖的函数
-// wait 是等待时间
-const debounce = (func, wait = 50) => {
-  // 缓存一个定时器 id
-  let timer = 0
-  // 这里返回的函数是每次用户实际调用的防抖函数
-  // 如果已经设定过定时器了，就清空上一次定时器
-  // 开始一个新的定时器，延迟执行用户传入的方法
+/**
+ * @param {Function} func - 回调函数
+ * @param {number} wait - 等待时间
+ * @return {Function}
+ */
+function debounce(func, wait = 50) {
+  let timer = null
+
   return function(...args) {
     if (timer) {
       clearTimeout(timer)
     }
+
     timer = setTimeout(() => {
       func.apply(this, args)
     }, wait)
   }
 }
-// 不难看出，如果用户调用该函数的间隔小于 wait，上一次的时间还未到就被清除了，并不会执行函数。
 ```
 
-这是一个简单版的防抖。但是有缺陷，这个防抖只能在最后调用。一般的防抖会有 immediate 选型，表示是否立即调用。这两者的区别，举个栗子来说：
+这是一个简单版的防抖，但是有缺陷，这个防抖只能在最后调用。一般的防抖会有 immediate 选项，表示是否立即调用。这两者的区别，举个栗子来说：
 
 - 例如在搜索引擎搜索问题的时候，我们希望用户输入完最后一个字才调用查询接口。这个时候，使用 `延迟执行` 的防抖函数，它总是一连串（间隔小于 wait）函数触发之后调用。
 - 例如用户给 `yck` 的 interviewMap 点 star 时，我们希望用户点第一下时候去调用接口，并且成功之后改变 star 按钮的样子，用户就可以立马得到反馈是否 star 成功。这个情况使用 `立即执行` 的防抖函数，它总是在第一次调用，并且下一次调用必须与前一次调用的时间间隔大于 wait 才会触发。
@@ -909,7 +934,7 @@ function debounce (fun, wait = 50, immediate = true) {
 
 ## 节流
 
-防抖和节流的本质是不一样的。防抖动是将多次执行变为最后一次执行，节流是将多次执行变成每隔一段时间执行。
+防抖和节流的本质是不一样的。防抖是将多次执行变为最后一次执行，节流是将多次执行变成每隔一段时间执行。
 
 ```js
 /**
@@ -951,4 +976,31 @@ _.throttle = (func, wait, options) => {
     let now = _.now()
   }
 } 
+```
+
+## 为什么 0.1 + 0.2 != 0.3
+
+因为 JS 采用 IEEE 754 双精度版本（64位），并且只要采用 IEEE 754 的语言都有该问题。
+
+计算机表示十进制是采用二进制表示的，所以 `0.1` 在二进制表示为
+
+```js
+// (0011) 表示循环
+0.1 = 2^-4 * 1.10011(0011)
+```
+
+那么如何得到这个二进制呢，我们可以演算一下
+
+![](http://qiuzi-blog.oss-cn-shenzhen.aliyuncs.com/2019-06-01-042632.png)
+
+小数算二进制和整数不同。乘法计算时，只计算小数位，整数位用作每一位的二进制，并且得到的第一位是最高位。因此可以得出 `0.1 = 2^-4 * 1.10011(0011)`，那么 `0.2` 的演算也基本如上所示，只需要去掉第一步乘法，所以得出 `0.2 = 2^-3 * 1.10011(0011)`。
+
+回来继续说 IEEE 754 双精度。六十四位中符号位占一位，整数位占十一位，其余五十二位都为小数位。因为 `0.1` 和 `0.2` 都是无限循环的二进制，所以在小数位末尾处需要判断是否进位（就和十进制的四舍五入一样）。
+
+所以 `2^-4 * 1.10011...001` 进位后就变成了 `2^-4 * 1.10011(0011 * 12次)010` 。那么把这两个二进制加起来会得出 `2^-2 * 1.0011(0011 * 11次)0100` , 这个值算成十进制就是 `0.30000000000000004`。
+
+下面说一下原生解决办法，如下代码所示
+
+```js
+parseFloat((0.1 + 0.2).toFixed(10))
 ```
