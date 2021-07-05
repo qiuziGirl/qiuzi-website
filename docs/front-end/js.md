@@ -751,24 +751,15 @@ let obj = {
 
 ## 模块化
 
-在有 Babel 的情况下，可以直接使用 ES6 的模块化
+JS 模块目前主流有 ES6 模块与 CommonJS 模块。除此之外，还有逐渐被淘汰的 AMD(Require.js) 与 CMD(Sea.js)。其中，ES6 模块与 CommonJS 模块主要有三个差异：
 
-```js
-// a.js
-export function a() {}
-export function b() {}
-
-// b.js
-export default function() {}
-
-// c.js
-import { a, b } from './a.js'
-import XXX from './b.js'
-```
+- CommonJS 模块输出的是一个值得拷贝，ES6 模块输出的是值得引用
+- CommonJS 模块是运行时加载，ES6 模块是编译时输出接口
+- CommonJS 模块的 `require()` 是同步加载模块，ES6 模块的 `import` 命令是异步加载，有一个独立的模块依赖的解析阶段
 
 ### CommonJS
 
-`CommonJS` 是 Node 独有的规范，浏览器中使用就需要用到 `Browserify` 解析了。
+`CommonJS` 是 Node 独有的规范
 
 ```js
 // a.js
@@ -807,31 +798,17 @@ let load = function (module) {
 
 再来说说 `module.exports` 和 `exports`，用法其实是相似的，但是不能对 `exports` 直接赋值，不会有任何效果。
 
-对于 `CommonJS` 和 ES6 中的模块化的两者区别是：
+### ES6 模块
 
-- 前者支持动态导入，也就是 `require(${path}/xx.js)`；后者目前不支持，但是已有提案
-- 前者是同步导入，因为用于服务端，文件都在本地，同步导入即使卡住主线程影响也不大。而后者是异步导入，因为用于浏览器，需要下载文件，如果也采用同步导入会对页面渲染有很大影响
-
-- 前者在导出时，为值拷贝，就算导出的值变了，导入的值也不会改变。所以如果想更新值，必须重新导入一次。但是后者采用实时绑定的方式，导入导出的值都指向同一个内存地址，所以导入值会跟随导出值变化
-- 后者会编译成 `require/exports` 来执行的
-
-### AMD
-
-AMD 是由 `RequireJS` 提出的
+ES6 模块是在 JavaScript 语言标准的层面上实现的模块功能
 
 ```js
-// AMD
-define(['./a', './b'], function(a, b) {
-  a.do()
-  b.do()
-})
+// a.js
+export let a = 1
 
-define(function(require, exports, module) {
-  let a = require('./a')
-  a.doSomething()
-  let b = require('./b')
-  b.doSomething()
-})
+// b.js
+import { a } from './a.js'
+console.log(a) // -> 1
 ```
 
 ## 防抖
