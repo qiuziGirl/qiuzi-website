@@ -12,7 +12,7 @@
 
 - [预览](https://www.qiuzi.fun/)
 
-![](http://qiuzi-blog.oss-cn-shenzhen.aliyuncs.com/site-preview.png)
+![](https://qiuzi-blog.oss-cn-shenzhen.aliyuncs.com/site-preview.png)
 
 ## 开发
 

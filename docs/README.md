@@ -14,5 +14,5 @@ features:
 
 <div class="footer">
   <span>MIT Licensed | Copyright © 2021-present QiuZi</span>
-  <a href="http://beian.miit.gov.cn" target="_blank">粤ICP备20042301号</a>
+  <a href="https://beian.miit.gov.cn" target="_blank">粤ICP备20042301号</a>
 </div>

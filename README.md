@@ -12,7 +12,7 @@ English | [简体中文](./README.zh-CN.md)
 
 - [Preview](https://www.qiuzi.fun/)
 
-![](http://qiuzi-blog.oss-cn-shenzhen.aliyuncs.com/site-preview.png)
+![](https://qiuzi-blog.oss-cn-shenzhen.aliyuncs.com/site-preview.png)
 
 ## Getting started
 

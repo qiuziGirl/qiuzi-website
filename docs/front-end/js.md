@@ -290,7 +290,7 @@ new Foo.getName()    // -> 1
 new Foo().getName()  // -> 2
 ```
 
-![](http://qiuzi-blog.oss-cn-shenzhen.aliyuncs.com/js-new.png)
+![](https://qiuzi-blog.oss-cn-shenzhen.aliyuncs.com/js-new.png)
 
 从上图可以看出，`new Foo()` 的优先级大于 `new Foo`。所以对于上述代码来说，可以这样划分执行顺序
 
@@ -705,7 +705,7 @@ console.log(newObje)
 
 如果你有这么一个循环引用对象，你会发现你不能通过该方法深拷贝
 
-![](http://qiuzi-blog.oss-cn-shenzhen.aliyuncs.com/deep-copy-error.png)
+![](https://qiuzi-blog.oss-cn-shenzhen.aliyuncs.com/deep-copy-error.png)
 
 在遇到 `undefined`、`symbol`、函数的时候，该对象也不能正常序列化
 
@@ -968,7 +968,7 @@ _.throttle = (func, wait, options) => {
 
 那么如何得到这个二进制呢，我们可以演算一下
 
-![](http://qiuzi-blog.oss-cn-shenzhen.aliyuncs.com/2019-06-01-042632.png)
+![](https://qiuzi-blog.oss-cn-shenzhen.aliyuncs.com/2019-06-01-042632.png)
 
 小数算二进制和整数不同。乘法计算时，只计算小数位，整数位用作每一位的二进制，并且得到的第一位是最高位。因此可以得出 `0.1 = 2^-4 * 1.10011(0011)`，那么 `0.2` 的演算也基本如上所示，只需要去掉第一步乘法，所以得出 `0.2 = 2^-3 * 1.10011(0011)`。
 

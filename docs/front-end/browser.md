@@ -77,7 +77,7 @@ node.addEventListener('click', event => {
 JSONP 的原理很简单，就是利用 `<script>` 标签没有跨域限制的漏洞。通过 `<script>` 标签指向一个需要访问的地址并提供一个回调函数来接收数据当需要通讯时。
 
 ```js
-<script src="http://domain/api?param1=a&param2=b&callback=jsonp"></script>
+<script src="https://domain/api?param1=a&param2=b&callback=jsonp"></script>
 <script>
     function jsonp(data) {
     	console.log(data)
