@@ -21,7 +21,7 @@ UDP 是一个面向报文（报文可以理解为一段段的数据）的协议�
 
 因为 UDP 没有 TCP 那么复杂，需要保证数据不丢失且有序到达。所以 UDP 的头部开销小，只有八字节，相比 TCP 的至少二十字节要少得多，在传输数据报文时是很高效的。
 
-![](https://yck-1254263422.cos.ap-shanghai.myqcloud.com/blog/2019-06-01-42633.png)
+![](http://qiuzi-blog.oss-cn-shenzhen.aliyuncs.com/qiuzi-website/2019-06-01-42633.png)
 
 头部包含了以下几个数据
 
@@ -39,7 +39,7 @@ UDP 不止支持一对一的传输方式，同样支持一对多，多对多，�
 
 TCP 头部比 UDP 头部复杂的多
 
-![](https://yck-1254263422.cos.ap-shanghai.myqcloud.com/blog/2019-06-01-042634.png)
+![](http://qiuzi-blog.oss-cn-shenzhen.aliyuncs.com/qiuzi-website/2019-06-01-042634.png)
 
 对于 TCP 头部来说，以下几个字段是很重要的
 
@@ -58,7 +58,7 @@ TCP 头部比 UDP 头部复杂的多
 
 HTTP 是无连接的，所以作为下层的 TCP 协议也是无连接的，虽然看似 TCP 将两端连接了起来，但是其实只是两端共同维护了一个状态
 
-![](https://yck-1254263422.cos.ap-shanghai.myqcloud.com/blog/2019-06-01-042638.png)
+![](http://qiuzi-blog.oss-cn-shenzhen.aliyuncs.com/qiuzi-website/2019-06-01-042638.png)
 
 TCP 的状态机是很复杂的，并且与建立断开连接时的握手息息相关，接下来就来详细描述下两种握手。
 
@@ -66,7 +66,7 @@ TCP 的状态机是很复杂的，并且与建立断开连接时的握手息息�
 
 #### 建立连接三次握手
 
-![](https://yck-1254263422.cos.ap-shanghai.myqcloud.com/blog/2019-06-01-042641.png)
+![](http://qiuzi-blog.oss-cn-shenzhen.aliyuncs.com/qiuzi-website/2019-06-01-042641.png)
 
 在 TCP 协议中，主动发起请求的一端为客户端，被动连接的一端称为服务端。不管是客户端还是服务端，TCP 连接建立完后都能发送和接收数据，所以 TCP 也是一个全双工的协议。
 
@@ -96,7 +96,7 @@ PS：在建立连接中，任意一端掉线，TCP 都会重发 SYN 包，一般
 
 #### 断开链接四次握手
 
-![](https://yck-1254263422.cos.ap-shanghai.myqcloud.com/blog/2019-06-01-42642.png)
+![](http://qiuzi-blog.oss-cn-shenzhen.aliyuncs.com/qiuzi-website/2019-06-01-42642.png)
 
 TCP 是全双工的，在断开连接时两端都需要发送 FIN 和 ACK。
 
@@ -164,13 +164,13 @@ PS：一般定时器设定的时间都会大于一个 RTT 的平均时间。
 
 发送端窗口包含已发送但未收到应答的数据和可以发送但是未发送的数据。
 
-![](https://yck-1254263422.cos.ap-shanghai.myqcloud.com/blog/2019-06-01-042642.png)
+![](http://qiuzi-blog.oss-cn-shenzhen.aliyuncs.com/qiuzi-website/2019-06-01-042642.png)
 
 发送端窗口是由接收窗口剩余大小决定的。接收方会把当前接收窗口的剩余大小写入应答报文，发送端收到应答后根据该值和当前网络拥塞情况设置发送窗口的大小，所以发送窗口的大小是不断变化的。
 
 当发送端接收到应答报文后，会随之将窗口进行滑动
 
-![](https://yck-1254263422.cos.ap-shanghai.myqcloud.com/blog/2019-06-01-042643.png)
+![](http://qiuzi-blog.oss-cn-shenzhen.aliyuncs.com/qiuzi-website/2019-06-01-042643.png)
 
 滑动窗口实现了流量控制。接收方通过报文告知发送方还可以发送多少数据，从而保证接收方能够来得及接收数据。
 
@@ -357,7 +357,7 @@ TLS 协议位于传输层之上，应用层之下。首次进行 TLS 协议传�
 
 **TLS 握手过程如下图：**
 
-![](https://yck-1254263422.cos.ap-shanghai.myqcloud.com/blog/2019-06-01-042644.jpg)
+![](http://qiuzi-blog.oss-cn-shenzhen.aliyuncs.com/qiuzi-website/2019-06-01-042644.jpg)
 
 1. 客户端发送一个随机值，需要的协议和加密方式
 2. 服务端收到客户端的随机值，自己也产生一个随机值，并根据客户端需求的协议和加密方式来使用对应的方式，发送自己的证书（如果需要验证客户端证书需要说明）
@@ -376,21 +376,21 @@ HTTP 2.0 相比于 HTTP 1.X，可以说是大幅度提高了 web 的性能。
 
 你可以通过 [该链接](https://http2.akamai.com/demo) 感受下 HTTP 2.0 比 HTTP 1.X 到底快了多少。
 
-![](https://yck-1254263422.cos.ap-shanghai.myqcloud.com/blog/2019-06-01-042644.png)
+![](http://qiuzi-blog.oss-cn-shenzhen.aliyuncs.com/qiuzi-website/2019-06-01-042644.png)
 
 在 HTTP 1.X 中，因为队头阻塞的原因，你会发现请求是这样的
 
-![](https://yck-1254263422.cos.ap-shanghai.myqcloud.com/blog/2019-06-01-042646.png)
+![](http://qiuzi-blog.oss-cn-shenzhen.aliyuncs.com/qiuzi-website/2019-06-01-042646.png)
 
 在 HTTP 2.0 中，因为引入了多路复用，你会发现请求是这样的
 
-![](https://yck-1254263422.cos.ap-shanghai.myqcloud.com/blog/2019-06-01-042647.png)
+![](http://qiuzi-blog.oss-cn-shenzhen.aliyuncs.com/qiuzi-website/2019-06-01-042647.png)
 
 ### 二进制传输
 
 HTTP 2.0 中所有加强性能的核心点在于此。在之前的 HTTP 版本中，我们是通过文本的方式传输数据。在 HTTP 2.0 中引入了新的编码机制，所有传输的数据都会被分割，并采用二进制格式编码。
 
-![](https://yck-1254263422.cos.ap-shanghai.myqcloud.com/blog/2019-06-01-042649.png)
+![](http://qiuzi-blog.oss-cn-shenzhen.aliyuncs.com/qiuzi-website/2019-06-01-042649.png)
 
 ### 多路复用
 
@@ -400,7 +400,7 @@ HTTP 2.0 中所有加强性能的核心点在于此。在之前的 HTTP 版本�
 
 多路复用，就是在一个 TCP 连接中可以存在多条流。换句话说，也就是可以发送多个请求，对端可以通过帧中的标识知道属于哪个请求。通过这个技术，可以避免 HTTP 旧版本中的队头阻塞问题，极大的提高传输性能。
 
-![](https://yck-1254263422.cos.ap-shanghai.myqcloud.com/blog/2019-06-01-042650.png)
+![](http://qiuzi-blog.oss-cn-shenzhen.aliyuncs.com/qiuzi-website/2019-06-01-042650.png)
 
 ### Header 压缩
 

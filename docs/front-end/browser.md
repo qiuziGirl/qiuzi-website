@@ -404,16 +404,15 @@ self.addEventListener("fetch", e => {
 });
 ```
 
-打开页面，可以在开发者工具中的 `Application` 看到 Service Worker 已经启动了![](https://yck-1254263422.cos.ap-shanghai.myqcloud.com/blog/2019-06-01-042724.png)
+打开页面，可以在开发者工具中的 `Application` 看到 Service Worker 已经启动了![](http://qiuzi-blog.oss-cn-shenzhen.aliyuncs.com/qiuzi-website/2019-06-01-042724.png)
 
 在 Cache 中也可以发现我们所需的文件已被缓存
 
-![](https://yck-1254263422.cos.ap-shanghai.myqcloud.com/blog/2019-06-01-042727.png)
+![](http://qiuzi-blog.oss-cn-shenzhen.aliyuncs.com/qiuzi-website/2019-06-01-042727.png)
 
 当我们重新刷新页面可以发现我们缓存的数据是从 Service Worker 中读取的
 
-![](https://yck-1254263422.cos.ap-shanghai.myqcloud.com/blog/2019-06-01-042730.png)
-
+![](http://qiuzi-blog.oss-cn-shenzhen.aliyuncs.com/qiuzi-website/2019-06-01-042730.png)
 
 
 # 渲染机制
@@ -426,15 +425,15 @@ self.addEventListener("fetch", e => {
 4. 根据渲染树来布局，计算每个节点的位置。
 5. 调用 GPU 绘制，合成图层，显示在屏幕上。
 
-![](https://yck-1254263422.cos.ap-shanghai.myqcloud.com/blog/2019-06-01-042733.png)
+![](http://qiuzi-blog.oss-cn-shenzhen.aliyuncs.com/qiuzi-website/2019-06-01-042733.png)
 
 在构建 CSSOM 树时，会阻塞渲染，直至 CSSOM 树构建完成。并且构建 CSSOM 树是一个十分消耗性能的过程，所以应该尽量保证层级扁平，减少过度层叠，越是具体的 CSS 选择器，执行速度越慢。
 
 当 HTML 解析到 script 标签时，会暂停构建 DOM，完成后才会从暂停的地方重新开始。也就是说，如果你想首屏渲染的越快，就越不应该在首屏就加载 JS 文件。并且 CSS 也会影响 JS 的执行，只有当解析完样式表才会执行 JS，所以也可以认为这种情况下，CSS 也会暂停构建 DOM。
 
-![](https://yck-1254263422.cos.ap-shanghai.myqcloud.com/blog/2019-06-01-042734.png)
+![](http://qiuzi-blog.oss-cn-shenzhen.aliyuncs.com/qiuzi-website/2019-06-01-042734.png)
 
-![](https://yck-1254263422.cos.ap-shanghai.myqcloud.com/blog/2019-06-01-042735.png)
+![](http://qiuzi-blog.oss-cn-shenzhen.aliyuncs.com/qiuzi-website/2019-06-01-042735.png)
 
 ## Load 和 DOMContentLoaded 区别
 
@@ -530,4 +529,4 @@ DOMContentLoaded 事件触发代表初始的 HTML 被完全加载和解析，不
 
 - 将频繁运行的动画变为图层，图层能够阻止该节点回流影响别的元素。比如对于 `video` 标签，浏览器会自动将该节点变为图层。
 
-  ![](https://yck-1254263422.cos.ap-shanghai.myqcloud.com/blog/2019-06-01-042737.png)
+  ![](http://qiuzi-blog.oss-cn-shenzhen.aliyuncs.com/qiuzi-website/2019-06-01-042737.png)
