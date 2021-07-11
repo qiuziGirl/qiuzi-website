@@ -58,7 +58,8 @@ function getCSSidebar (groupB, introductionB) {
         ['', introductionB],
         'network',
         'dataStruct',
-        'algorithm'
+        'algorithm',
+        'git'
       ]
     }
   ]
