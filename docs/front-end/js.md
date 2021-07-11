@@ -2,11 +2,10 @@
 
 ## 内置类型
 
-JS 分为七种内置类型，七种内置类型又分为两大类型：基本类型和引用类型（Object）。
+JS 分为八种内置类型，八种内置类型又分为两大类型：基本类型和引用类型（Object）。<br>
+基本类型有七种： `number`，`bigint`，`string`，`boolean`，`symbol`，`undefined`，`null`。
 
-基本类型有六种： `number`，`string`，`boolean`，`symbol`，`undefined`，`null`。
-
-其中，JS的数字类型是浮点型的，没有整形。并且，浮点类型基于 IEEE 754 标准实现，在使用过程中会遇到某些 [Bug](#为什么-0-1-0-2-0-3)。`NaN` 也属于 `number` 类型，但 `NaN` 不等于自身。
+其中，JS 的数字类型是浮点型的，没有整形。并且，浮点类型基于 IEEE 754 标准实现，在使用过程中会遇到某些 [Bug](#为什么-0-1-0-2-0-3)。`NaN` 也属于 `number` 类型，但 `NaN` 不等于自身。
 
 对于基本类型，若使用字面量定义方式，则这个变量只是一个字面量，只有在必要的时候才转换为对应的数据类型。
 
@@ -30,6 +29,7 @@ console.log(a.name); // EF
 
 ```js
 typeof 1;          // 'number'
+typeof 1n          // 'bigint'
 typeof '1';        // 'string'
 typeof true;       // 'boolean'
 typeof Symbol();   // 'symbol'
@@ -75,6 +75,7 @@ a === void 0
 | 原始类型值     | 结果          |
 | -------------- | ------------- |
 | Number         | number        |
+| Bigint         | number        |
 | String         | number 或 NaN |
 | Boolean        | 0 或 1        |
 | Symbol         | TypeError |
@@ -104,6 +105,7 @@ if (tyepof obj.valueOf() === 'object') {
 | 原始类型值     | 结果                                      |
 | -------------- | ----------------------------------------- |
 | Number         | "number"                                  |
+| Bigint         | "number"                                  |
 | String         | string                                    |
 | Boolean        | "true" 或 "false"                         |
 | Symbol         | "symbol"                                  |
@@ -119,6 +121,7 @@ if (tyepof obj.valueOf() === 'object') {
 | 值                 | 结果  |
 | ------------------ | ----- |
 | 0（包含 +0 和 -0） | false |
+| 0n(包含 -0n)       | false |
 | NaN                | false |
 | ''(空字符串)       | false |
 | false              | false |
