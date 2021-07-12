@@ -74,7 +74,8 @@ node.addEventListener('click', event => {
 
 ### JSONP
 
-JSONP 的原理很简单，就是利用 `<script>` 标签在标准脚本模式下没有跨域限制的漏洞。通过 `<script>` 标签指向一个需要访问的地址并提供一个回调函数来接收数据。
+JSONP 的原理很简单，就是利用 `<script>` 标签在标准脚本模式下没有跨域限制的漏洞。
+通过 `<script>` 标签指向一个需要访问的地址并提供一个回调函数来接收数据，点击查看 [实践博文](https://blog.csdn.net/qq_41548644/article/details/118685972)。
 
 ```js
 <script src="https://domain/api?param1=a&param2=b&callback=jsonp"></script>
