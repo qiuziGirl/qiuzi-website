@@ -8,7 +8,6 @@ module.exports = {
   themeConfig: {
     locales: {
       '/': {
-        lastUpdated: '上次更新',
         nav: [
           { 
             text: '指南', 
@@ -25,7 +24,8 @@ module.exports = {
           '/cs/': getCSSidebar('计算机基础', '介绍')
         }
       }
-    }
+    },
+    lastUpdated: 'Last Updated'
   }
 }
 
