@@ -41,6 +41,7 @@ function getFrontEndSidebar (groupA, introductionA) {
         'browser',
         'performance',
         'safety',
+        'framework',
         'vue',
         'react',
       ]
