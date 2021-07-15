@@ -531,3 +531,29 @@ DOMContentLoaded 事件触发代表初始的 HTML 被完全加载和解析，不
 - 将频繁运行的动画变为图层，图层能够阻止该节点回流影响别的元素。比如对于 `video` 标签，浏览器会自动将该节点变为图层。
 
   ![](http://qiuzi-blog.oss-cn-shenzhen.aliyuncs.com/qiuzi-website/2019-06-01-042737.png)
+
+## 兼容性
+
+目前各浏览器厂商发展逐渐趋同，[Edge 也基于 Chromium 进行开发了](https://blogs.windows.com/windowsexperience/2018/12/06/microsoft-edge-making-the-web-better-through-more-open-source-collaboration/#PiP0Q2HEFCTlImkD.97)。
+但浏览器兼容性依然存在，主要分为**样式兼容性**与**交互兼容性**。
+
+### 样式兼容性
+
+1. 因历史原因，不同浏览器样式存在差异，可通过 [normalize.css](https://www.npmjs.com/package/normalize.css) 抹平差异；也可自定制 reset.css 全局重置样式。
+
+2. 当 CSS3 还没成为真正标准时，浏览器为支持这些属性，提供了特定的浏览器前缀。直至现在，仍有部分属性需要加上浏览器前缀。在开发中，一般通过 IDE 插件、CSS 预处理器或者前端自动化构建工具进行处理，如 `vue-cli` 就引入 `autoprefixer` 进行处理。
+
+浏览器引擎与前缀的对应关系如下：
+
+|  引擎   |   代表浏览器   |  前缀   |
+| :-----: | :------------: | :-----: |
+| Trident |    IE浏览器    |   -ms   |
+|  Gecko  |    Firefox     |  -moz   |
+| Presto  |     Opera      |   -o    |
+| Webkit  | Chrome、Safari | -webkit |
+
+### 交互兼容性
+
+1. **事件兼容问题**。在 IE8 及更低版本 IE 浏览器中， `addEventListener`, `removeEventListener`, `Event.preventDefault` 和 `Event.stopPropagation` 等方法是不被支持的。可以使用 IE 自身实现的方法来代替，具体 `polyfill` 查看 [MDN](https://developer.mozilla.org/zh-CN/docs/Web/API/EventTarget/addEventListener#%E5%85%BC%E5%AE%B9%E6%80%A7) 
+
+2. **new Date() 构造函数**。入参为 `YYYY-MM-DD` 格式无法被所有浏览器兼容，为保证正确性，一般使用 `YYYY/MM/DD` 格式。现在更推荐使用如 [dayjs](https://day.js.org/) 这样的工具库处理日期问题。
