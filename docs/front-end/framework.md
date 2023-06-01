@@ -264,11 +264,11 @@ p.a // -> Get 'a' = 2
 
 `www.test.com/#/` 就是 Hash URL，当 `#` 后面的哈希值发生变化时，不会向服务器请求数据，可以通过 `hashchange` 事件来监听 URL 的变化，从而进行页面跳转。
 
-![](http://qiuzi-blog.oss-cn-shenzhen.aliyuncs.com/qiuzi-website/2019-06-01-043729.png)
+![](https://qiuzi-blog.oss-cn-shenzhen.aliyuncs.com/qiuzi-website/2019-06-01-043729.png)
 
 History 模式是 HTML5 新推出的功能，比 Hash URL 更美观，但需要后端配置支持。
 
-![](http://qiuzi-blog.oss-cn-shenzhen.aliyuncs.com/qiuzi-website/2019-06-01-043731.png)
+![](https://qiuzi-blog.oss-cn-shenzhen.aliyuncs.com/qiuzi-website/2019-06-01-043731.png)
 
 ## Virtual Dom
 

@@ -8,11 +8,11 @@
 
 通常使用 `merge` 操作将分支上的代码合并到 `master` 中，分支样子如下所示
 
-![](http://qiuzi-blog.oss-cn-shenzhen.aliyuncs.com/qiuzi-website/Snipaste_2021-07-11_16-44-27.png)
+![](https://qiuzi-blog.oss-cn-shenzhen.aliyuncs.com/qiuzi-website/Snipaste_2021-07-11_16-44-27.png)
 
 使用 `rebase` 后，会将 `develop` 上的 `commit` 按顺序移到 `master` 的第三个 `commit` 后面，如下所示
 
-![](http://qiuzi-blog.oss-cn-shenzhen.aliyuncs.com/qiuzi-website/Snipaste_2021-07-11_16-45-46.png)
+![](https://qiuzi-blog.oss-cn-shenzhen.aliyuncs.com/qiuzi-website/Snipaste_2021-07-11_16-45-46.png)
 
 `rebase` 对比 `merge`，优势在于合并后的结果很清晰，只有一条线；劣势在于一旦出现冲突，解决冲突会很麻烦，可能需要解决多个冲突，但是 `merge` 出现冲突只需要解决一次。
 
@@ -46,7 +46,7 @@ git stash pop
 
 `reflog` 可以看到 HEAD 的移动记录。假如之前误删了一个分支，可以通过 `git reflog` 查看移动 HEAD 的哈希值
 
-![](http://qiuzi-blog.oss-cn-shenzhen.aliyuncs.com/qiuzi-website/2019-06-01-43130.png)
+![](https://qiuzi-blog.oss-cn-shenzhen.aliyuncs.com/qiuzi-website/2019-06-01-43130.png)
 
 从图中可以看出，HEAD 的最后一次移动行为是 `merge` 后，接下来分支 `new` 就被删除了。那么，我们可以通过以下命令找回 `new` 分支
 
