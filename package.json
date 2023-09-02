@@ -5,8 +5,8 @@
   "author": "qiuzi <2515632823@qq.com>",
   "license": "MIT",
   "scripts": {
-    "dev": "vuepress dev docs",
-    "build": "vuepress build docs"
+    "dev": "set NODE_OPTIONS=--openssl-legacy-provider && vuepress dev docs",
+    "build": "set NODE_OPTIONS=--openssl-legacy-provider && vuepress build docs"
   },
   "dependencies": {
     "vuepress": "^1.8.3"
