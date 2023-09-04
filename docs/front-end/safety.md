@@ -2,14 +2,14 @@
 
 ## XSS
 
-> **跨站脚本攻击**（Cross-Site Scripting，XSS）是指通过存在安全漏洞的 Web 网站注册用户的浏览器运行非法的 HTML 标签或 JavaScript 进行的一种攻击。
-动态创建的 HTML 部分有可能隐藏着安全漏洞。就这样，攻击者编写脚本设下陷阱，用户在自己的浏览器上运行时，一不小心就会受到被动攻击。
+> **跨站脚本攻击**（Cross-Site Scripting，XSS）指通过存在安全漏洞的 Web 网站运行非法的 HTML 标签或 JavaScript 进行的一种攻击。
+动态创建的 HTML 有可能隐藏着安全漏洞，攻击者编写脚本设下陷阱，用户在自己浏览器上运行时，容易受到被动攻击。
 
 XSS 分为三种：反射型，存储型和 DOM-based
 
 ### 如何攻击
 
-XSS 通过修改 HTML 节点或者执行 JS 代码来攻击网站，例如通过 URL 获取某些参数
+通过修改 HTML 节点或者执行 JS 代码来攻击网站，例如通过 URL 获取某些参数
 
 ```js
 <!-- http://www.domain.com?name=<script>alert(1)</script> -->
@@ -56,7 +56,7 @@ const html = xss('<h1 id="title">XSS Demo</h1><script>alert("xss");</script>')
 console.log(html)
 ```
 
-以上示例使用 [xss](https://www.npmjs.com/package/xss) 来实现，可以看到输出中保留了 `h1` 标签且过滤掉了 `script` 标签
+以上示例使用 [XSS](https://www.npmjs.com/package/xss) 来实现，可以看到输出中保留了 `h1` 标签且过滤掉了 `script` 标签
 
 ### CSP
 
