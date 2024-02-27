@@ -2,6 +2,30 @@
 
 本文不会介绍 Git 的基本操作，而把关注点放在工作中可以常用却被忽视的**高级**操作。另外，推荐文章 [Git操作可视化介绍 10 大命令](https://dev.to/lydiahallie/cs-visualized-useful-git-commands-37p1)。
 
+## Stash
+
+`stash` 用于临时保存工作目录的改动。开发中可能会遇到代码写到一半需要切换分支进行其他操作。如果这时不想 `commit`，则可以使用该命令。
+
+```shell
+git stash
+```
+
+使用该命令可以暂存工作目录，若需要恢复工作目录，只需要使用
+
+```shell
+git stash pop
+```
+
+## Reset
+
+如果你想删除刚写的 commit，则可以通过以下命令实现
+
+```shell
+git reset --hard HEAD^
+```
+
+但是 `reset` 的本质并不是删除 `commmit`，而是重新设置 HEAD 和它指向的 branch。
+
 ## Rebase
 
 该命令可以让和 `merge` 命令得到的结果基本是一致的。
@@ -28,20 +52,6 @@ git switch master
 git merge develop
 ```
 
-## Stash
-
-`stash` 用于临时保存工作目录的改动。开发中可能会遇到代码写到一半需要切换分支进行其他操作。如果这时不想 `commit`，则可以使用该命令。
-
-```shell
-git stash
-```
-
-使用该命令可以暂存工作目录，若需要恢复工作目录，只需要使用
-
-```shell
-git stash pop
-```
-
 ## Reflog
 
 `reflog` 可以看到 HEAD 的移动记录。假如之前误删了一个分支，可以通过 `git reflog` 查看移动 HEAD 的哈希值
@@ -55,13 +65,3 @@ git checkout 37d9aca
 git switch -c new
 ```
 PS：`reflog` 记录是有时效的，只会保存一段时间内的记录。
-
-## Reset
-
-如果你想删除刚写的 commit，则可以通过以下命令实现
-
-```shell
-git reset --hard HEAD^
-```
-
-但是 `reset` 的本质并不是删除 `commmit`，而是重新设置 HEAD 和它指向的 branch。
