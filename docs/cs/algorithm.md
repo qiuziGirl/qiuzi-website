@@ -477,47 +477,67 @@ var reverseList = function(head) {
 
 ## 树
 
-### 二叉树的先序，中序，后序遍历
+### 二叉树的先序、中序、后序遍历
 
-先序遍历表示先访问根节点，然后访问左节点，最后访问右节点。
+先序遍历：先访问根节点，然后访问左节点，最后访问右节点。
 
-中序遍历表示先访问左节点，然后访问根节点，最后访问右节点。
+中序遍历：先访问左节点，然后访问根节点，最后访问右节点。
 
-后序遍历表示先访问左节点，然后访问右节点，最后访问根节点。
+后序遍历：先访问左节点，然后访问右节点，最后访问根节点。
 
-#### 递归实现
-
-递归实现相当简单，代码如下
+#### 递归实现，代码如下
 
 ```js
-function TreeNode(val) {
-  this.val = val;
-  this.left = this.right = null;
-}
-var traversal = function(root) {
-  if (root) {
-    // 先序
-    console.log(root); 
-    traversal(root.left);
-    // 中序
-    // console.log(root); 
-    traversal(root.right);
-    // 后序
-    // console.log(root);
+class TreeNode {
+  constructor(value = 0, left = null, right = null) {
+    this.value = value;
+    this.left = left;
+    this.right = right;
   }
-};
-```
+}
 
-对于递归的实现来说，只需要理解每个节点都会被访问三次就明白为什么这样实现了。
+// 前序遍历
+function preOrderTraversal(root) {
+  if (root === null) return []
+  return [root.value, ...preOrderTraversal(root.left), ...preOrderTraversal(root.right)]
+}
+
+// 中序遍历
+function inOrderTraversal(root) {
+  if (root === null) return []
+  return [...inOrderTraversal(root.left), root.value, ...inOrderTraversal(root.right)]
+}
+
+// 后序遍历
+function postOrderTraversal(root) {
+  if (root === null) return []
+  return [...postOrderTraversal(root.left), ...postOrderTraversal(root.right), root.value]
+}
+
+// 创建二叉树
+//        A
+//       / \
+//      B   C
+//     / \   \
+//    D   E   F
+const root = new TreeNode('A')
+root.left = new TreeNode('B')
+root.right = new TreeNode('C')
+root.left.left = new TreeNode('D')
+root.left.right = new TreeNode('E')
+root.right.right = new TreeNode('F')
+
+console.log("前序遍历:", preOrderTraversal(root)) // ["A", "B", "D", "E", "C", "F"]
+console.log("中序遍历:", inOrderTraversal(root))  // ["D", "B", "E", "A", "C", "F"]
+console.log("后序遍历:", postOrderTraversal(root)) // ["D", "E", "B", "F", "C", "A"]
+```
 
 #### 非递归实现
 
-非递归实现使用了栈的结构，通过栈的先进后出模拟递归实现。
-
-以下是先序遍历代码实现
+使用栈的结构，通过栈的先进后出模拟递归，以下是先序遍历代码实现
 
 ```js
-function pre(root) {
+function preOrderTraversal(root) {
   if (root) {
     let stack = [];
     // 先将根节点 push
@@ -527,8 +547,7 @@ function pre(root) {
       // 弹出栈顶元素
       root = stack.pop();
       console.log(root);
-      // 因为先序遍历是先左后右，栈是先进后出结构
-      // 所以先 push 右边再 push 左边
+      // 因为先序遍历是先左后右，栈是先进后出结构，所以先 push 右边再 push 左边
       if (root.right) {
         stack.push(root.right);
       }
@@ -543,7 +562,7 @@ function pre(root) {
 以下是中序遍历代码实现
 
 ```js
-function mid(root) {
+function inOrderTraversal(root) {
   if (root) {
     let stack = [];
     // 中序遍历是先左再根最后右
@@ -568,12 +587,11 @@ function mid(root) {
 以下是后序遍历代码实现，该代码使用了两个栈来实现遍历，相比一个栈的遍历来说要容易理解很多
 
 ```js
-function pos(root) {
+function postOrderTraversal(root) {
   if (root) {
     let stack1 = [];
     let stack2 = [];
-    // 后序遍历是先左再右最后根
-	// 所以对于一个栈来说，应该先 push 根节点
+    // 后序遍历是先左再右最后根，所以对于栈来说，应该先 push 根节点
     // 然后 push 右节点，最后 push 左节点
     stack1.push(root);
     while (stack1.length > 0) {
